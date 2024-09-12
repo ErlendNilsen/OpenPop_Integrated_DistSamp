@@ -69,7 +69,7 @@ Here, $D_{juv, j, x, t}$ and $D_{ad, j, x, t}$ are the densities of juvenile and
 
 ![Graphical representation of the ptarmigan life cycle with two age classes and the data sources, as well as joint distributions, included in the integrated distance sampling model. Indices $t$ denote year while $x$ represent the added dimension for area (corresponding to 41 reporting districts). Juvenile~x,t~ = juveniles in area $x$ year $t$. Adult~x,t~ = adults in area $x$ in year $t$. $R_{x,t}$ = recruitment rate in area $x$ in year $t$. $S_{x,t}$ = survival probability from year $t$ to $t+1$ in area $x$. Note that the additional site (=transect) dimension, $j$, is omitted for the sake of illustration.](Figures/RypeIDSM_multiArea_structure.png){#fig-model}
 
-The initial densities, $D_{juv, x, j, 1}$ and $D_{ad, x, j, 1}$ are modelled for each site (= transect) as random realizations of log normal distributions with area-specific log means ($\mu^{D1}_x$) and log standard deviations ($\sigma^{D1}_x$). Survival ($S_{x,t}$) and recruitment ($R_{x,t}$), on the other hand, are assumed to be the same for all sites $j$ within a given area $x$ and were modelled as:
+The initial densities of adults, $D_{ad, x, j, 1}$, are modelled for each site (= transect) as random realizations of log normal distributions with area-specific log means ($\mu^{D1}_x$) and log standard deviations ($\sigma^{D1}_x$). Site-specific initial juvenile density, $D_{juv, x, j, 1}$, is calculated from initial adult density as $D_{ad, x, j, 1} * R_{x, 1}$. Survival ($S_{x,t}$) and recruitment ($R_{x,t}$), on the other hand, are assumed to be the same for all sites $j$ within a given area $x$ and were modelled as:
 
 $$
 \begin{aligned}

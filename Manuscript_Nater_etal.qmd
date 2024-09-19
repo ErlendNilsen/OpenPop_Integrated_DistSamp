@@ -138,11 +138,11 @@ printPostSum <- function(table, row = NULL, area = NULL, exp = FALSE, pCalc = FA
   print.out <- list(
     area.name = table$Area[row],
     post.sum = paste0(
-      round(table$Median[row], digits = 3), 
+      round(table$Median[row], digits = 2), 
       " [",
-      round(table$lCI[row], digits = 3),
+      round(table$lCI[row], digits = 2),
       ", ",
-      round(table$uCI[row], digits = 3),
+      round(table$uCI[row], digits = 2),
       "]"
     )
   )
@@ -254,11 +254,11 @@ Median (a) and coefficient of variation (standard deviation / mean) (b) of poste
 
 ```{r, echo = FALSE}
 DDcorrs <- readRDS("Results/DD_corrCoef.rds")
-DD_min_lam <- round(min(subset(DDcorrs, Parameter == "Lambda")$`50%`), digits = 3)
-DD_max_lam <- round(max(subset(DDcorrs, Parameter == "Lambda")$`50%`), digits = 3)
+DD_min_lam <- round(min(subset(DDcorrs, Parameter == "Lambda")$`50%`), digits = 2)
+DD_max_lam <- round(max(subset(DDcorrs, Parameter == "Lambda")$`50%`), digits = 2)
 
 VRcorrs <- readRDS("Results/VR_corrCoef.rds")
-samCorr_mean <- round(subset(VRcorrs, area == "Overall")[,2:3], digits = 3)
+samCorr_mean <- round(subset(VRcorrs, area == "Overall")[,2:3], digits = 2)
 ```
 
 Average population growth rates over the last four years (2018-2021) ranged from moderate declines (`r lambda.min$post.sum` in the "`r lambda.min$area.name`" area) to \> 50% increase (`r lambda.max$post.sum` in the "`r lambda.max$area.name`" area). In the majority of reporting areas (`r n.pos.lambda` out of 41), populations of willow ptarmigan have been increasing over the period 2018-2021 (@fig-lam). Some areas -- predominantly in central Norway -- also had declining populations, but many of those declines followed upon periods of increase between the start of data collection in 2007 and sometime between 2016 and 2018 (SF "TimeSeries_popDens1.pdf").
@@ -295,13 +295,13 @@ The MCMC chains for many of the area-specific average survival probabilities and
 GT <- readRDS("Results/PosteriorSummaries_GenTime_byArea.rds")
 GT_R0 <- subset(GT, GT_measure == "Per generation growth rate")
 GT_elas <- subset(GT, GT_measure == "Inverse of fecundity elasticity")
-medianCorr <- round(cor(GT_R0$Median, GT_elas$Median), digits = 3)
+medianCorr <- round(cor(GT_R0$Median, GT_elas$Median), digits = 2)
 
 minIdx <- which(GT$Median == min(GT$Median))
 maxIdx <- which(GT$Median == max(GT$Median))
 
-GT_min <- round(GT[minIdx, c("Median", "lCI", "uCI")], digits = 3)
-GT_max <- round(GT[maxIdx, c("Median", "lCI", "uCI")], digits = 3)
+GT_min <- round(GT[minIdx, c("Median", "lCI", "uCI")], digits = 2)
+GT_max <- round(GT[maxIdx, c("Median", "lCI", "uCI")], digits = 2)
 
 GT_min_print <- paste0(GT_min[1], ", [", GT_min[2], ", ", GT_min[3], "]")
 GT_max_print <- paste0(GT_max[1], ", [", GT_max[2], ", ", GT_max[3], "]")

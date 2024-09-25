@@ -1,6 +1,6 @@
 ---
 title: "Large-scale spatio-temporal variation in vital rates and population dynamics of an alpine bird"
-format: html
+format: pdf
 author: Chloé R. Nater, Francesco Frassinelli, James A. Martin, Erlend B. Nilsen
 editor: visual
 bibliography: rypeIDSM_MS2.bib

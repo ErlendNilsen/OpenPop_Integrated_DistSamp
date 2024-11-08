@@ -413,7 +413,7 @@ Funding for both data collection and analytic work was provided by the Norwegian
 
 The authors declare that they comply with the PCI rule of having no financial conflicts of interest in relation to the content of the article.
 
-# Data and code availability
+# Data, script, code, and supplementary information availability
 
 The raw data from the line transect surveys is deposited on GBIF and can be accessed freely via the Living Norway Data Portal (https://data.livingnorway.no/). The work presented above is based on versions 1.7, 1.8, and 1.12 for the datasets from Fjellstyrene [@fjellstyre2022], Statskog [@statskog2022], and FeFo [@fefo2022], respectively.
 

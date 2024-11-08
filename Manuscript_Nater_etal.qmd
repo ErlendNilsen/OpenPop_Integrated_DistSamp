@@ -4,6 +4,7 @@ format: html
 author: Chloé R. Nater, Francesco Frassinelli, James A. Martin, Erlend B. Nilsen
 editor: visual
 bibliography: rypeIDSM_MS2.bib
+csl: peer-community-journal-pci_Zotero.csl
 ---
 
 # Abstract

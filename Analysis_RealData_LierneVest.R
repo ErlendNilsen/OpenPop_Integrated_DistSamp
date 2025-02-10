@@ -1,10 +1,15 @@
 library(tidyverse)
 
+if(!require("LivingNorwayR", character.only = TRUE)){
+  devtools::install_github("LivingNorway/LivingNorwayR")
+  library(LivingNorwayR,, character.only = TRUE)
+}
+
 # SETUP #
 #-------#
 
 ## Define seed for initial value simulation and MCMC
-mySeed <- 0
+mySeed <- 32
 
 ## Source all functions in "R" folder
 sourceDir <- function(path, trace = TRUE, ...) {
@@ -42,12 +47,16 @@ survVarT <- FALSE
 # Rodent covariate on reproduction
 fitRodentCov <- TRUE
 
+## Switch for telemetry data (?)
+
+telemetryData <- TRUE
+
 # DOWNLOAD/FETCH DATA #
 #---------------------#
 
 if(downloadData){
   #Rype_arkiv <- downloadLN(datasets = "Fjellstyrene", versions = 1.6, save = TRUE)
-  Rype_arkiv <- downloadLN(datasets = c("Fjellstyrene", "Statskog", "FeFo"), versions = c(1.7, 1.8, 1.12), save = TRUE)
+  Rype_arkiv <- downloadLN(datasets = c("Fjellstyrene"), versions = 1.7, save = TRUE)
 }else{
   stop("downloadData = FALSE not supported yet. There is an issue with encoding when using LivingNorwayR::initializeDwCArchive() that needs to be resolved first.")
   #Rype_arkiv <- initializeDwCArchive("data/Rype_arkiv.zip")
@@ -80,6 +89,7 @@ LT_data <- wrangleData_LineTrans(DwC_archive_list = Rype_arkiv,
 
 ## Read in and reformat CMR data
 d_cmr <- wrangleData_CMR(minYear = minYear)
+
 
 
 # WRANGLE RODENT DATA #
@@ -115,6 +125,11 @@ input_data <- prepareInputData(d_trans = LT_data$d_trans,
 # MODEL SETUP #
 #-------------#
 
+## Expand seeds for simulating initial values
+nchains <- 3
+MCMC.seeds <- expandSeed_MCMC(seed = mySeed, 
+                              nchains = nchains)
+
 ## Write model code
 modelCode <- writeModelCode(survVarT = survVarT)
 
@@ -125,8 +140,10 @@ model_setup <- setupModel(modelCode = modelCode,
                           fitRodentCov = fitRodentCov,
                           nim.data = input_data$nim.data,
                           nim.constants = input_data$nim.constants,
-                          testRun = FALSE, nchains = 4,
-                          initVals.seed = mySeed)
+                          testRun = TRUE, nchains = 3,
+                          niter = 20000, nthin = 30, 
+                          nburn = 11100,
+                          initVals.seed = MCMC.seeds)
 
 # MODEL (TEST) RUN #
 #------------------#
@@ -140,7 +157,7 @@ IDSM.out <- nimbleMCMC(code = model_setup$modelCode,
                        niter = model_setup$mcmcParams$niter, 
                        nburnin = model_setup$mcmcParams$nburn, 
                        thin = model_setup$mcmcParams$nthin, 
-                       samplesAsCodaMCMC = TRUE, 
+                       samplesAsCodaMCMC = TRUE,
                        setSeed = mySeed)
 Sys.time() - t.start
 

@@ -77,7 +77,7 @@ if(downloadData){
 ## Set localities/areas and time period of interest
 localities <- listLocations()
 areas <- listAreas()
-minYear <- 2007
+minYear <- 2015
 maxYear <- 2021
 
 ## List duplicate transects and remove
@@ -150,7 +150,7 @@ model_setup <- setupModel(modelCode = modelCode,
                           addDummyDim = addDummyDim,
                           nim.data = input_data$nim.data,
                           nim.constants = input_data$nim.constants,
-                          testRun = testRun, 
+                          #testRun = testRun, 
                           nchains = nchains,
                           initVals.seed = MCMC.seeds)
 
@@ -159,7 +159,7 @@ model_setup <- setupModel(modelCode = modelCode,
 # MODEL (TEST) RUN #
 #------------------#
 
-if(!parallelMCMC){
+
   t.start <- Sys.time()
   IDSM.out <- nimbleMCMC(code = model_setup$modelCode,
                          data = input_data$nim.data, 
@@ -174,39 +174,7 @@ if(!parallelMCMC){
                          setSeed = MCMC.seeds)
   Sys.time() - t.start
   
-}else{
-  
-  ## Add toggles to constants
-  input_data$nim.constants$fitRodentCov <- fitRodentCov
-  input_data$nim.constants$survVarT <- survVarT
-  input_data$nim.constants$R_perF <- R_perF
-  input_data$nim.constants$telemetryData <- telemetryData
-  
-  ## Set up cluster
-  this_cluster <- makeCluster(model_setup$mcmcParams$nchains)
-  #clusterEvalQ(this_cluster, library(nimble))
-  #clusterEvalQ(this_cluster, library(nimbleDistance))
-  
-  ## Collect chain-specific information
-  per_chain_info <- vector("list", model_setup$mcmcParams$nchains)
-  for(i in 1:model_setup$mcmcParams$nchains){
-    per_chain_info[[i]] <- list(mySeed = MCMC.seeds[i],
-                                inits = model_setup$initVals[[i]])
-  }
-  
-  ## Run chains in parallel
-  t.start <- Sys.time()
-  IDSM.out <- parLapply(cl = this_cluster, 
-                        X = per_chain_info, 
-                        fun = runMCMC_allcode, 
-                        model_setup = model_setup,
-                        input_data = input_data)
-  Sys.time() - t.start
-  
-  
-  stopCluster(this_cluster)
-  
-}
+
 
 saveRDS(IDSM.out, file = 'rypeIDSM_dHN_multiArea_realData_Lierne.rds')
 
